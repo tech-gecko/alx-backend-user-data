@@ -5,7 +5,8 @@
 from flask import request
 from typing import List, TypeVar
 
-class Auth():
+
+class Auth:
     """
         Auth class containing auth functions.
     """
@@ -15,6 +16,7 @@ class Auth():
 
     def authorization_header(self, request=None) -> str:
         return None
-    
+
+
     def current_user(self, request=None) -> TypeVar('User'):
         return None
