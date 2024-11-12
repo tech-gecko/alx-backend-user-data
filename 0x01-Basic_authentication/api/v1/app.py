@@ -19,12 +19,14 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 def unauthorized(error) -> str:
     """ Unauthorized handler
     """
-    response_data = {
-        "error": "Unauthorized"
-    }
-    response = make_response(json.dumps(response_data, indent=2) + "\n", 401)
-    response.headers['Content-Type'] = 'application/json'
-    return response
+    return jsonify({"error": "Unauthorized"}), 401
+
+
+@app.errorhandler(403)
+def forbidden(error) -> str:
+    """ Forbidden handler
+    """
+    return jsonify({"error": "Forbidden"}), 403
 
 
 @app.errorhandler(404)
