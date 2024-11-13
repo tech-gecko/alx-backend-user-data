@@ -4,15 +4,20 @@ Route module for the API
 """
 from os import getenv
 from api.v1.views import app_views
-from flask import Flask, jsonify, abort, request, make_response
+from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
-import json
 
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+
+auth = None
+auth_type = os.getenv('AUTH_TYPE')
+if auth_type == 'auth':
+    from api.v1.auth.auth import Auth
+    auth = Auth()
 
 
 @app.errorhandler(401)
@@ -34,6 +39,30 @@ def not_found(error) -> str:
     """ Not found handler
     """
     return jsonify({"error": "Not found"}), 404
+
+
+@app.before_request
+def filter_request():
+    """
+        Handler that executes before each request.
+        Checks if an incoming request requires auth.
+        If required, it authenticates the request.
+    """
+    if auth is None:
+        return
+
+    excluded = ['/api/v1/status/', '/api/v1/unauthorized/',
+                '/api/v1/forbidden/']
+    if not auth.require_auth(request.path, excluded):
+        return  # if path is in excluded list, return without auth.
+
+    header = auth.authorization_header(request)
+    user = auth.current_user(request)
+
+    if header is None:
+        abort(401)
+    if user is None:
+        abort(403)
 
 
 if __name__ == "__main__":
