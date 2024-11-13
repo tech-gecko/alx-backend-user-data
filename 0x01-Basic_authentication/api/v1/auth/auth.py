@@ -17,11 +17,11 @@ class Auth:
         if path is None or excluded_paths is None:
             return True
         if excluded_paths == []:
-            return True 
+            return True
 
         if path[-1] != '/':
             path = path + '/'
-        
+
         for _path in excluded_paths:
             if _path[-1] == '*':
                 pattern = _path.replace('*', '.*')
