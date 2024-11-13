@@ -64,7 +64,9 @@ class BasicAuth(Auth):
             return None, None
 
         email = decoded_base64_authorization_header.split(':')[0]
-        password = decoded_base64_authorization_header.split(':')[1]
+        """ Allow password to contain ':'. """
+        split_password = decoded_base64_authorization_header.split(':')[1:]
+        password = "".join(split_password)
 
         return email, password
 
