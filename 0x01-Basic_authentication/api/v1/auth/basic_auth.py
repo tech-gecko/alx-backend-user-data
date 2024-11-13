@@ -39,7 +39,7 @@ class BasicAuth(Auth):
             return None
 
         try:
-            decoded_bytes = base64.decode(
+            decoded_bytes = base64.b64decode(
                 base64_authorization_header,
                 validate=True
             )
