@@ -65,8 +65,14 @@ class BasicAuth(Auth):
 
         email = decoded_base64_authorization_header.split(':')[0]
         """ Allow password to contain ':'. """
-        split_password = decoded_base64_authorization_header.split(':')[1:]
-        password = "".join(split_password)
+        password_parts = decoded_base64_authorization_header.split(':')[1:]
+        password = ":".join(password_parts)
+        """
+            OR
+            email, password = ....split(':', 1)
+            This splits using just the first ':' as a delim.
+            2 for first two, and so on.
+        """
 
         return email, password
 
