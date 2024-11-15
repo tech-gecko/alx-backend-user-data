@@ -30,8 +30,11 @@ def view_one_user(user_id: str = None) -> str:
     """
         Session auth for GET '/api/v1/users/me'.
     """
-    if user_id == 'me' and g.current_user is None:
-        abort(404)
+    if user_id == 'me':
+        if g.current_user is None:
+            abort(404)
+        else:
+            return jsonify(g.current_user.to_json())
 
     user = User.get(user_id)
     if user is None:
