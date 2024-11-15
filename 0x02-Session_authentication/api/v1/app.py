@@ -4,7 +4,7 @@ Route module for the API
 """
 from os import getenv
 from api.v1.views import app_views
-from flask import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request, g
 from flask_cors import (CORS, cross_origin)
 import os
 
@@ -60,11 +60,11 @@ def filter_request():
         return  # if path is in excluded list, return without auth.
 
     header = auth.authorization_header(request)
-    request.current_user = auth.current_user(request)
-
     if header is None:
         abort(401)
-    if request.current_user is None:
+
+    g.current_user = auth.current_user(request)
+    if g.current_user is None:
         abort(403)
 
 
