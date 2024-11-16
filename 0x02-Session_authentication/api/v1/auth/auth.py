@@ -2,7 +2,7 @@
 """
     Module containing the 'Auth' class.
 """
-import os
+from os import getenv
 import re
 from typing import List, TypeVar
 
@@ -56,11 +56,7 @@ class Auth:
         if request is None:
             return None
 
-        _my_session_id = os.getenv('SESSION_NAME')
-
-        if _my_session_id is None:
-            return None
-
-        cookie_value = request.cookies.get(_my_session_id)
+        cookie_name = getenv('SESSION_NAME')
+        cookie_value = request.cookies.get(cookie_name, None)
 
         return cookie_value
