@@ -34,7 +34,8 @@ def create_session() -> str:
     response = jsonify(user.to_json())
 
     from api.v1.app import auth
-    session_id = auth.create_session(user.id)
+    user_id = getattr(user, 'id')
+    session_id = auth.create_session(user_id)
     cookie_name = getenv('SESSION_NAME')
     response.set_cookie(cookie_name, session_id)
 
