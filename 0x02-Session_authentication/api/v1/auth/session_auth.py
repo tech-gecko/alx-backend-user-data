@@ -10,8 +10,8 @@ class SessionAuth(Auth):
     """
         SessionAuth class containing functions for Session authentication.
     """
-    def __init__(self):
-        self.user_id_by_session_id = {}
+    # Dictionary containing session ID as key and user ID as value.
+    user_id_by_session_id = {}
 
     def create_session(self, user_id: str = None) -> str:
         """
