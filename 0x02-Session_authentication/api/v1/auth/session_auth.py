@@ -2,14 +2,15 @@
 """
     Module containing the 'SessionAuth' class.
 """
-from .auth import Auth
-from ....models.user import User
+from api.v1.auth.auth import Auth
+from models.user import User
+from typing import TypeVar
 import uuid
 
 
 class SessionAuth(Auth):
     """
-        SessionAuth class containing functions for Session authentication.
+        SessionAuth class containing functions for session authentication.
     """
     user_id_by_session_id = {}
     # ^^ Dictionary containing session ID as key and user ID as value.
@@ -39,7 +40,7 @@ class SessionAuth(Auth):
 
         return user_id
 
-    def current_user(self, request=None):
+    def current_user(self, request=None) -> TypeVar('User'):
         """
             Returns a 'User' instance based on a cookie value.
         """
@@ -59,3 +60,22 @@ class SessionAuth(Auth):
             return None
 
         return user
+
+    def destroy_session(self, request=None) -> bool:
+        """
+            Deletes the user session / logs out.
+        """
+        if request is None:
+            return False
+
+        cookie_value = self.session_cookie(request)
+        if cookie_value is None:
+            return False
+        
+        user_id = self.user_id_by_session_id.get(cookie_value, None)
+        if user_id is None:
+            return False
+        
+        user_from_dict = self.user_id_by_session_id.pop(cookie_value)
+
+        return True
