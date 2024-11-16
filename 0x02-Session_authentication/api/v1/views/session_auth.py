@@ -26,6 +26,8 @@ def create_session() -> str:
         users = User.search({'email': email})
     except Exception:
         return jsonify({'error': "no user found for this email"}), 404
+    if len(users) <= 0:
+        return jsonify({'error': "no user found for this email"}), 404
 
     user = users[0]
     if not user.is_valid_password(password):
@@ -34,8 +36,7 @@ def create_session() -> str:
     response = jsonify(user.to_json())
 
     from api.v1.app import auth
-    user_id = getattr(user, 'id')
-    session_id = auth.create_session(user_id)
+    session_id = auth.create_session(user.id)
     cookie_name = getenv('SESSION_NAME')
     response.set_cookie(cookie_name, session_id)
 
