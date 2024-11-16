@@ -2,6 +2,7 @@
 """
     Module containing the 'Auth' class.
 """
+import os
 import re
 from typing import List, TypeVar
 
@@ -47,10 +48,19 @@ class Auth:
             Gets the current user from the request.
         """
         return None
-    
+
     def session_cookie(self, request=None):
         """
             Returns a cookie value from a request.
         """
         if request is None:
             return None
+
+        _my_session_id = os.getenv('SESSION_NAME')
+
+        if _my_session_id is None:
+            return None
+
+        cookie_value = request.cookies.get(_my_session_id)
+
+        return cookie_value
