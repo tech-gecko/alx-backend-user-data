@@ -61,9 +61,14 @@ def filter_request():
     if not auth.require_auth(request.path, excluded):
         return  # if path is in excluded list, return without auth.
 
+    """
+        'g' is used here because it persists throughout the request.
+        If 'request' was used, there'd have been issues importing the attributes
+        attributes into other files that need them as they are custom attributes.
+    """  
     header = auth.authorization_header(request)
-    cookie_name = auth.session_cookie(request)
-    if header is None and cookie_name is None:
+    cookie_value = auth.session_cookie(request)
+    if header is None and cookie_value is None:
         abort(401)
 
     g.current_user = auth.current_user(request)

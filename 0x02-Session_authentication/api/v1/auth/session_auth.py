@@ -3,6 +3,7 @@
     Module containing the 'SessionAuth' class.
 """
 from .auth import Auth
+from ....models.user import User
 import uuid
 
 
@@ -37,3 +38,24 @@ class SessionAuth(Auth):
             return None
 
         return user_id
+
+    def current_user(self, request=None):
+        """
+            Returns a 'User' instance based on a cookie value.
+        """
+        if request is None:
+            return None
+
+        cookie_value = self.session_cookie(request)
+        if cookie_value is None:
+            return None
+
+        user_id = self.user_id_by_session_id.get(cookie_value, None)
+        if user_id is None:
+            return None
+
+        user = User.get(user_id)
+        if user is None:
+            return None
+
+        return user
