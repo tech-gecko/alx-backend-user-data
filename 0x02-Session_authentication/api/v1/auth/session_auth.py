@@ -71,11 +71,11 @@ class SessionAuth(Auth):
         cookie_value = self.session_cookie(request)
         if cookie_value is None:
             return False
-        
+
         user_id = self.user_id_by_session_id.get(cookie_value, None)
         if user_id is None:
             return False
-        
+
         user_from_dict = self.user_id_by_session_id.pop(cookie_value)
 
         return True
