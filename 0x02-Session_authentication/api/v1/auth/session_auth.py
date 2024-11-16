@@ -11,8 +11,8 @@ class SessionAuth(Auth):
     """
         SessionAuth class containing functions for Session authentication.
     """
-    # Dictionary containing session ID as key and user ID as value.
     user_id_by_session_id = {}
+    # ^^ Dictionary containing session ID as key and user ID as value.
 
     def create_session(self, user_id: str = None) -> str:
         """
