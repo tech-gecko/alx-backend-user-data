@@ -5,6 +5,7 @@ from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models.user import User
 from os import getenv
+from typing import Tuple
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
@@ -35,7 +36,7 @@ def create_session() -> str:
         from api.v1.app import auth
         session_id = auth.create_session(getattr(users[0], 'id'))
         resp = jsonify(users[0].to_json())
-        resp.set_cookie(os.getenv("SESSION_NAME"), session_id)
+        resp.set_cookie(getenv("SESSION_NAME"), session_id)
 
         return resp
 
@@ -44,7 +45,7 @@ def create_session() -> str:
 
 @app_views.route('/auth_session/logout', methods=['DELETE'],
                  strict_slashes=False)
-def delete_session() -> str:
+def delete_session() -> Tuple[str, int]:
     """
         DELETE api/v1/auth_session/logout
         Logs out and deletes the session.
