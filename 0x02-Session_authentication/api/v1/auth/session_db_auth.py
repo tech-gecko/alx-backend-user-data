@@ -63,6 +63,6 @@ class SessionDBAuth(SessionExpAuth):
         if len(sessions) <= 0:
             return False
 
-        sessions[0].remove
+        sessions[0].remove()
 
         return True
