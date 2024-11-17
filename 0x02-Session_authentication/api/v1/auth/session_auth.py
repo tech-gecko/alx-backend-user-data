@@ -65,17 +65,10 @@ class SessionAuth(Auth):
         """
             Deletes the user session / logs out.
         """
-        if request is None:
+        session_id = self.session_cookie(request)
+        user_id = self.user_id_for_session_id(session_id)
+        if (request is None or session_id is None) or user_id is None:
             return False
-
-        cookie_value = self.session_cookie(request)
-        if cookie_value is None:
-            return False
-
-        user_id = self.user_id_by_session_id.get(cookie_value, None)
-        if user_id is None:
-            return False
-
-        user_from_dict = self.user_id_by_session_id.pop(cookie_value)
-
+        if session_id in self.user_id_by_session_id:
+            del self.user_id_by_session_id[session_id]
         return True
