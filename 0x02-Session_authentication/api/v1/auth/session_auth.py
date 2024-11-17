@@ -63,7 +63,7 @@ class SessionAuth(Auth):
 
     def destroy_session(self, request=None) -> bool:
         """
-            Deletes the user session / logs out.
+            Deletes the user session and logs out.
         """
         session_id = self.session_cookie(request)
         user_id = self.user_id_for_session_id(session_id)

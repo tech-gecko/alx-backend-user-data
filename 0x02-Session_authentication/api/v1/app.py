@@ -26,6 +26,9 @@ elif auth_type == 'session_auth':
 elif auth_type == 'session_exp_auth':
     from api.v1.auth.session_exp_auth import SessionExpAuth
     auth = SessionExpAuth()
+elif auth_type == 'session_db_auth':
+    from api.v1.auth.session_db_auth import SessionDBAuth
+    auth = SessionDBAuth()
 
 
 @app.errorhandler(401)
@@ -64,16 +67,16 @@ def filter_request():
     if not auth.require_auth(request.path, excluded):
         return  # if path is in excluded list, return without auth.
 
-    """
-        'g' is used here because it persists throughout the request.
-        If 'request' was used, there'd have been issues importing the attributes
-        attributes into other files that need them as they are custom attributes.
-    """  
     header = auth.authorization_header(request)
     cookie_value = auth.session_cookie(request)
     if header is None and cookie_value is None:
         abort(401)
 
+    """
+        'g' is used here because it persists throughout the request.
+        If 'request' was used, there'd have been issues importing the
+        attributes into other files as they are custom attributes.
+    """
     g.current_user = auth.current_user(request)
     if g.current_user is None:
         abort(403)
