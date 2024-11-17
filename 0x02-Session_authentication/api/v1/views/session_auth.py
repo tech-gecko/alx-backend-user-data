@@ -36,9 +36,9 @@ def create_session() -> Tuple[str, int]:
         from api.v1.app import auth
         sessiond_id = auth.create_session(getattr(users[0], 'id'))
         resp = jsonify(users[0].to_json())
-        resp.set_cookie(os.getenv("SESSION_NAME"), sessiond_id)
+        resp.set_cookie(getenv("SESSION_NAME"), sessiond_id)
 
-        return resp
+        return resp, 201
 
     return jsonify({"error": "wrong password"}), 401
 
