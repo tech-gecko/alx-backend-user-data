@@ -10,7 +10,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 
-from typing import List
+from typing import List, Dict
 from user import User
 
 
@@ -46,7 +46,7 @@ class DB:
 
         return new_user
 
-    def find_user_by(self, *args: List, **kwargs: dict) -> User:
+    def find_user_by(self, *args: List, **kwargs: Dict) -> User:
         """
             Returns the first row found in the DB
             as filtered by 'args' or 'kwargs'.
@@ -74,7 +74,7 @@ class DB:
 
         return user
 
-    def update_user(self, user_id: int, **kwargs: dict) -> None:
+    def update_user(self, user_id: int, **kwargs: Dict) -> None:
         """
             Update the user's (whose ID is passed) attributes as passed in the
             method's kwargs then commit changes to the database.
