@@ -19,9 +19,6 @@ class Auth:
             Takes in a password string argument and returns bytes.
             The returned bytes is a salted hash of the input password.
         """
-        if password is None:
-            return None
-
         # Convert str to bytes for use in bcrypt.hashpw
         bytes_password = password.encode("utf-8")
         hashed_password = bcrypt.hashpw(bytes_password, bcrypt.gensalt())
