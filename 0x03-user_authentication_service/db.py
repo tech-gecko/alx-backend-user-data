@@ -46,28 +46,17 @@ class DB:
 
         return new_user
 
-    def find_user_by(self, *args: List, **kwargs: Dict) -> User:
+    def find_user_by(self, **kwargs: Dict) -> User:
         """
             Returns the first row found in the DB
             as filtered by 'args' or 'kwargs'.
         """
         session = self._session
 
-        if args:
-            try:
-                user = session.query(User).\
-                    filter(User.email == args[0]).\
-                    filter(User.hashed_password == args[1]).\
-                    one()
-            except NoResultFound:
-                raise NoResultFound
-        elif kwargs:
-            try:
-                user = session.query(User).filter_by(**kwargs).one()
-            except NoResultFound:
-                raise NoResultFound
-        else:
-            raise InvalidRequestError
+        try:
+            user = session.query(User).filter_by(**kwargs).one()
+        except NoResultFound:
+            raise NoResultFound
 
         if not user:
             raise InvalidRequestError
