@@ -53,14 +53,16 @@ class DB:
         """
         session = self._session
 
+        # Validate keys
+        for key in kwargs.keys():
+            if not hasattr(User, key):
+                raise InvalidRequestError
+
         try:
             user = session.query(User).filter_by(**kwargs).one()
         except NoResultFound:
             raise NoResultFound
-
-        if not user:
-            raise InvalidRequestError
-
+        
         return user
 
     def update_user(self, user_id: int, **kwargs: Dict) -> None:
