@@ -46,13 +46,15 @@ class Auth:
         """
         try:
             user = self._db.find_user_by(email=email)
+        except Exception:
+            return False
+
+        if user:
             hashed_password = _hash_password(password)
             # Checks if passed pw (when hashed) matches the one in DB.
             if bcrypt.checkpw(
                 hashed_password, getattr(user, 'hashed_password')
             ):
                 return True
-        except Exception:
-            return False
 
         return False
