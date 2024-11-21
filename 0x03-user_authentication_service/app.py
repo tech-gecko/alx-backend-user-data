@@ -54,7 +54,7 @@ def login() -> str:
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout() -> str:
+def logout() -> None:
     """
         Logs out the user (if exists) and deletes the session.
         It also redirects to home page on logout.
