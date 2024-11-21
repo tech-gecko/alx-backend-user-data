@@ -64,7 +64,7 @@ class DB:
 
         # Check if DB values for passed keys matches any passed value.
         user = session.query(User).filter(
-            tuple_(*fields).in_(values)
+            tuple_(*fields).in_([tuple(values)])
         ).first()
 
         if user is None:
