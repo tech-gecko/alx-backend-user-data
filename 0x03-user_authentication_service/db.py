@@ -3,7 +3,7 @@
 """
 from base import Base
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, tuple_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
@@ -52,17 +52,24 @@ class DB:
             as filtered by 'args' or 'kwargs'.
         """
         session = self._session
+        fields, values = [], []
 
-        # Validate keys
-        for key in kwargs.keys():
+        for key, value in kwargs.items():
+            # Validate keys
             if not hasattr(User, key):
                 raise InvalidRequestError
+            else:
+                fields.append(getattr(User, key))
+                values.append(value)
 
-        try:
-            user = session.query(User).filter_by(**kwargs).one()
-        except NoResultFound:
+        # Check if DB values for passed keys matches any passed value.
+        user = session.query(User).filter(
+            tuple_(*fields).in_(tuple(values))
+        )
+
+        if user is None:
             raise NoResultFound
-        
+
         return user
 
     def update_user(self, user_id: int, **kwargs: Dict) -> None:
