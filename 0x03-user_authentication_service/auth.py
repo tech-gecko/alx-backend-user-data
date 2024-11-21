@@ -107,7 +107,7 @@ class Auth:
             by updating the corresponding user's session ID to None.
         """
         if user_id is None:
-            return
+            return None
 
         self._db.update_user(user_id, session_id=None)
 
