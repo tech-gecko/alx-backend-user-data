@@ -5,7 +5,12 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'], strict_slashes=False)
-def hello():
+def index():
+    """
+        GET /
+        Return:
+         - The home page view.
+    """
     return jsonify({"message": "Bienvenue"})
 
 if __name__ == "__main__":
