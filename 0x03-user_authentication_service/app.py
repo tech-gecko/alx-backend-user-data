@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+    A simple Flask app with user authentication services.
+"""
 from flask import Flask, jsonify
 
 
