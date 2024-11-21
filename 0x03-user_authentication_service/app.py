@@ -3,7 +3,7 @@
     A simple Flask app with user authentication services.
 """
 from auth import Auth
-from flask import Flask, abort, jsonify, request
+from flask import Flask, abort, jsonify, redirect, request, url_for
 
 app = Flask(__name__)
 AUTH = Auth()
@@ -51,6 +51,21 @@ def login() -> str:
     response.set_cookie('session_id', new_session_id)
 
     return response
+
+
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+def logout() -> str:
+    """
+        Logs out the user (if exists) and deletes the session.
+        It also redirects to home page on logout.
+    """
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is None:
+        abort(403)
+
+    AUTH.destroy_session(user.id)
+    redirect(url_for('index'))
 
 
 if __name__ == "__main__":
