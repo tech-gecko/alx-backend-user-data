@@ -82,3 +82,21 @@ class Auth:
         setattr(user, 'session_id', new_session_id)
 
         return new_session_id
+
+    def get_user_from_session_id(self, session_id: str) -> User:
+        """
+            Takes a single session_id string argument and
+            returns the corresponding User or None.
+        """
+        if session_id is None:
+            return None
+
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+        except Exception:
+            return None
+
+        if not user:
+            return None
+
+        return user
