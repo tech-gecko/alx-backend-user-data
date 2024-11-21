@@ -52,7 +52,7 @@ class Auth:
                 hashed_password, getattr(user, 'hashed_password')
             ):
                 return True
-            else:
-                return False
         except Exception:
             return False
+
+        return False
