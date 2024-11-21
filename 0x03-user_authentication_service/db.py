@@ -46,7 +46,7 @@ class DB:
 
         return new_user
 
-    def find_user_by(self, **kwargs: Dict) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """
             Returns the first row found in the DB
             as filtered by 'args' or 'kwargs'.
@@ -69,7 +69,7 @@ class DB:
 
         return result
 
-    def update_user(self, user_id: int, **kwargs: Dict) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """
             Update the user's (whose ID is passed) attributes as passed in the
             method's kwargs then commit changes to the database.
