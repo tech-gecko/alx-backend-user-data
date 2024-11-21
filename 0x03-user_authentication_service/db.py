@@ -55,22 +55,19 @@ class DB:
         fields, values = [], []
 
         for key, value in kwargs.items():
-            # Validate keys
-            if not hasattr(User, key):
-                raise InvalidRequestError()
-            else:
+            if hasattr(User, key):
                 fields.append(getattr(User, key))
                 values.append(value)
+            else:
+                raise InvalidRequestError()
 
-        # Check if DB values for passed keys matches any passed value.
-        user = session.query(User).filter(
+        result = session.query(User).filter(
             tuple_(*fields).in_([tuple(values)])
         ).first()
-
-        if user is None:
+        if result is None:
             raise NoResultFound()
 
-        return user
+        return result
 
     def update_user(self, user_id: int, **kwargs: Dict) -> None:
         """
