@@ -75,8 +75,9 @@ class DB:
             method's kwargs then commit changes to the database.
         """
         session = self._session
-        user = self.find_user_by(id=user_id)
-        if user is None:
+        try:
+            user = self.find_user_by(id=user_id)
+        except NoResultFound:
             return
 
         updater = {}
@@ -86,7 +87,7 @@ class DB:
             else:
                 updater[getattr(User, key)] = value
 
-        session.query(User).filter(id == user_id).update(
+        session.query(User).filter(User.id == user_id).update(
             updater, synchronize_session=False
         )
 

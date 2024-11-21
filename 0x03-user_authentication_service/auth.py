@@ -106,6 +106,6 @@ class Auth:
             Destroys a session associated with a given user.
         """
         if user_id is None:
-            return None
+            return
 
         self._db.update_user(user_id, session_id=None)
