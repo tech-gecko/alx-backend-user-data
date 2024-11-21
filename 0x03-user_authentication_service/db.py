@@ -76,14 +76,18 @@ class DB:
         """
         session = self._session
         user = self.find_user_by(id=user_id)
-        session.add(user)
+        if user is None:
+            return
 
+        updater = {}
         for key, value in kwargs.items():
-            if key not in user.__table__.columns:
+            if not hasattr(User, key):
                 raise ValueError
+            else:
+                updater[getattr(User, key)] = value
 
-            setattr(user, key, value)
+        session.query(User).filter(id == user_id).update(
+            updater, synchronize_session=False
+        )
 
         session.commit()
-
-        return
