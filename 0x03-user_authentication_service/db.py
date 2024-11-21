@@ -57,7 +57,7 @@ class DB:
         for key, value in kwargs.items():
             # Validate keys
             if not hasattr(User, key):
-                raise InvalidRequestError
+                raise InvalidRequestError()
             else:
                 fields.append(getattr(User, key))
                 values.append(value)
@@ -68,7 +68,7 @@ class DB:
         ).first()
 
         if user is None:
-            raise NoResultFound
+            raise NoResultFound()
 
         return user
 
