@@ -50,10 +50,9 @@ class Auth:
             return False
 
         if user:
-            hashed_password = _hash_password(password)
-            # Checks if passed pw (when hashed) matches the one in DB.
+            # Checks if passed pw matches the one in DB.
             if bcrypt.checkpw(
-                hashed_password, getattr(user, 'hashed_password')
+                password.encode('utf-8'), getattr(user, 'hashed_password')
             ):
                 return True
 
