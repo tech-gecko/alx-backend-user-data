@@ -103,8 +103,7 @@ class Auth:
 
     def destroy_session(self, user_id: int) -> None:
         """
-            Destroys the session of the user with ID passed
-            by updating the corresponding user's session ID to None.
+            Destroys a session associated with a given user.
         """
         if user_id is None:
             return None
