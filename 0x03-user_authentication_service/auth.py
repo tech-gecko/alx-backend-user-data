@@ -121,8 +121,6 @@ class Auth:
         try:
             user = self._db.find_user_by(email=email)
         except Exception:
-            return None
-        if not user:
             raise ValueError
 
         reset_token = _generate_uuid()
