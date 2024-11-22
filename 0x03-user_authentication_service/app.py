@@ -23,6 +23,7 @@ def users() -> str:
     """
     POST /users
         Registers a user if the user doesn't already exist in the DB.
+        Adds the new user (ID, email, password) to the DB.
     """
     email = request.form.get('email')
     password = request.form.get('password')
@@ -39,6 +40,7 @@ def login() -> str:
     """
     POST /sessions
         Logs the user in if login info is correct.
+        Adds the new session ID to the DB.
     """
     email = request.form.get('email')
     password = request.form.get('password')
@@ -91,7 +93,7 @@ def profile() -> str:
 def get_reset_password_token() -> str:
     """
     POST /reset_password
-        Generates a reset password token and returns it.
+        Generates a reset password token, adds it to the DB and returns it.
     """
     email = request.form.get('email')
     try:
@@ -102,6 +104,24 @@ def get_reset_password_token() -> str:
     return jsonify(
         {"email": email, "reset_token": reset_token}
     ), 200
+
+
+@app.route('/reset_password', methods=['PUT'], strict_slashes=False)
+def update_password() -> str:
+    """
+    PUT /reset_password
+        Updates the user password in DB if the reset token is valid.
+    """
+    email = request.form.get('email')
+    new_password = request.form.get('new_password')
+    reset_token = request.form.get('reset_token')
+
+    try:
+        AUTH.update_password(reset_token, new_password)
+    except ValueError:
+        abort(403)
+
+    return jsonify({"email": email, "message": "Password updated"}), 200
 
 
 if __name__ == "__main__":
