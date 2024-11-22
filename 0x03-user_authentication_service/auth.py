@@ -115,9 +115,6 @@ class Auth:
             Generates a reset password token, updates the user's reset_token DB
             field and returns the token.
         """
-        if email is None:
-            return None
-
         try:
             user = self._db.find_user_by(email=email)
         except Exception:

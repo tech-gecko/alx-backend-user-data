@@ -12,9 +12,8 @@ AUTH = Auth()
 @app.route('/', methods=['GET'], strict_slashes=False)
 def index() -> str:
     """
-        GET /
-        Return:
-         - The home page view.
+    GET /
+        The home page view.
     """
     return jsonify({"message": "Bienvenue"})
 
@@ -22,7 +21,7 @@ def index() -> str:
 @app.route('/users', methods=['POST'], strict_slashes=False)
 def users() -> str:
     """
-        POST /users
+    POST /users
         Registers a user if the user doesn't already exist in the DB.
     """
     email = request.form.get('email')
@@ -38,6 +37,7 @@ def users() -> str:
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
     """
+    POST /sessions
         Logs the user in if login info is correct.
     """
     email = request.form.get('email')
@@ -56,6 +56,7 @@ def login() -> str:
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
 def logout() -> None:
     """
+    DELETE /sessions
         Logs out the user (if exists) and deletes the session.
         It also redirects to home page on logout.
     """
@@ -72,7 +73,8 @@ def logout() -> None:
 @app.route('/profile', methods=['GET'], strict_slashes=False)
 def profile() -> str:
     """
-        Gets the user profile
+    GET /profile
+        Gets and returns the user profile view.
     """
     session_id = request.cookies.get('session_id')
     if not session_id or type(session_id) != str:
@@ -83,6 +85,23 @@ def profile() -> str:
         abort(403)
 
     return jsonify({"email": user.email}), 200
+
+
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
+def get_reset_password_token() -> str:
+    """
+    POST /reset_password
+        Generates a reset password token and returns it.
+    """
+    email = request.form.get('email')
+    try:
+        reset_token = AUTH.get_reset_password_token(email)
+    except ValueError:
+        abort(403)
+
+    return jsonify(
+        {"email": email, "reset_token": reset_token}
+    ), 200
 
 
 if __name__ == "__main__":
