@@ -1,3 +1,7 @@
+#!/usr/bin/env/python3
+"""
+    Main file for integration testing of all endpoints in app.py.
+"""
 import requests
 
 
